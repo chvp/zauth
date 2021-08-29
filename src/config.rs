@@ -1,8 +1,10 @@
+use lettre::message::Mailbox;
 use rocket::serde::Deserialize;
 
 #[derive(Debug, Deserialize, Clone)]
 #[serde(crate = "rocket::serde")]
 pub struct Config {
+	pub admin_email: String,
 	pub authorization_token_validity_seconds: usize,
 	pub secure_token_length: usize,
 	pub bcrypt_cost: u32,
@@ -12,3 +14,5 @@ pub struct Config {
 	pub mail_from: String,
 	pub mail_server: String,
 }
+
+pub struct AdminEmail(pub Mailbox);

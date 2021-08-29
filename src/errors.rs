@@ -5,6 +5,7 @@ use thiserror::Error;
 
 use diesel::result::Error::NotFound;
 use lettre::Message;
+use std::convert::Infallible;
 use std::io::Cursor;
 use std::sync::mpsc::{SendError, TrySendError};
 use validator::ValidationErrors;
@@ -29,6 +30,8 @@ pub enum ZauthError {
 	LoginError(#[from] LoginError),
 	#[error("{0}")]
 	Custom(Status, String),
+	#[error("Infallible")]
+	Infallible(#[from] Infallible),
 }
 impl ZauthError {
 	pub fn not_found(what: &str) -> Self {
@@ -80,6 +83,7 @@ impl From<diesel::result::Error> for ZauthError {
 		}
 	}
 }
+
 pub type Result<T> = std::result::Result<T, ZauthError>;
 
 #[derive(Error, Debug)]
