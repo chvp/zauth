@@ -548,15 +548,19 @@ async fn register_user() {
 		let full_name = "maa";
 		let email = "spaghet@zeus.ugent.be";
 
-		let response = http_client
-			.post("/register")
-			.header(Accept::HTML)
-			.header(ContentType::Form)
-			.body(format!(
-				"username={}&password={}&full_name={}&email={}",
-				username, password, full_name, email
-			))
-			.dispatch()
+		let response =
+			common::expect_mail_to(vec!["admin@localhost"], async || {
+				http_client
+					.post("/register")
+					.header(Accept::HTML)
+					.header(ContentType::Form)
+					.body(format!(
+						"username={}&password={}&full_name={}&email={}",
+						username, password, full_name, email
+					))
+					.dispatch()
+					.await
+			})
 			.await;
 
 		assert_eq!(response.status(), Status::Created);
