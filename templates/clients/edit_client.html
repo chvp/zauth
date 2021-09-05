@@ -19,6 +19,9 @@
         <label for="description">Description</label>
         <textarea id="description" name="description" rows="4" cols="50" placeholder="Describe what the application does.">{{ client.description -}}</textarea>
 
+        <label for="secret">Secret</label>
+        <input type="text" disabled value="{{ client.secret }}">
+
         <div title="When this is enabled, users have to confirm they want to share their information with the client. After logging in, they will see the name and description of the client. Users have to explicitly confirm in order to complete the OAuth flow.
                     This should only be disabled for fully trusted applications.">
         <label for="needs_grant">Needs grant?</label>
@@ -34,6 +37,9 @@ https://example.com/auth/callback">{{- client.redirect_uri_list -}}</textarea>
 
         <button type="submit">Save</button>
     </fieldset>
+</form>
+<form action="/clients/{{ client.id }}/generate_secret" method="post">
+    <button type="submit">Generate new secret</button>
 </form>
 
 {% endblock content %}
