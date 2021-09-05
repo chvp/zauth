@@ -122,6 +122,10 @@ impl Client {
 		.await
 	}
 
+	pub async fn reload(self, db: &DbConn) -> Result<Self> {
+		Self::find(self.id, db).await
+	}
+
 	pub async fn delete(self, db: &DbConn) -> Result<()> {
 		db.run(move |conn| {
 			diesel::delete(clients::table.find(self.id)).execute(conn)
@@ -163,5 +167,10 @@ impl Client {
 		} else {
 			Err(ZauthError::from(AuthenticationError::AuthFailed))
 		}
+	}
+
+	pub async fn generate_secret(mut self, db: &DbConn) -> Result<Self> {
+		self.secret = Self::generate_random_secret();
+		self.update(db).await
 	}
 }
